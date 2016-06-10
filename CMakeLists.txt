@@ -147,6 +147,7 @@ set(COMMON_LIBRARIES
     ${FreeImage_LIBRARIES}
     ${SDL2_LIBRARY}
     ${CURL_LIBRARIES}
+    ${CMAKE_DL_LIBS}
     ${LIBCEC_LIBRARY}
     pugixml
     nanosvg
