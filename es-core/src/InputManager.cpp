@@ -195,18 +195,17 @@ void InputManager::init()
 			}else{
 				LOG(LogInfo) << "Added CEC device " << devices[0].path << " (com port: " << devices[0].comm << ")";
 				gStrPort = devices[0].comm;
-			}
-
+			
 			LOG(LogInfo) << "Opening a connection to the CEC adapter...";
 
-			if(!gParser->Open(gStrPort.c_str()))
-			{
-				LOG(LogInfo) << "Unable to open the device on port " << gStrPort;
-				UnloadLibCec(gParser);
+				if(!gParser->Open(gStrPort.c_str()))
+				{
+					LOG(LogInfo) << "Unable to open the device on port " << gStrPort;
+					UnloadLibCec(gParser);
+				} else {
+				gParser->SetActiveSource();
+				}
 			}
-
-			gParser->SetActiveSource();
-
 			mCECInputConfig = new InputConfig(DEVICE_CEC, "CEC-Device", CEC_GUID_STRING);
 			loadInputConfig(mCECInputConfig);
 		}
