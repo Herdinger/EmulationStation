@@ -172,9 +172,6 @@ void InputManager::init()
 		if(!gParser)
 		{
 			LOG(LogInfo) << "Could not load libcec.so";
-
-			if(gParser)
-				UnloadLibCec(gParser);
 		}else{
 			std::string gStrPort = getConfigPath();
 
@@ -191,7 +188,6 @@ void InputManager::init()
 			if(iDevicesFound <= 0)
 			{
 				LOG(LogInfo) << "No CEC devices found";
-				UnloadLibCec(gParser);
 			}else{
 				LOG(LogInfo) << "Added CEC device " << devices[0].path << " (com port: " << devices[0].comm << ")";
 				gStrPort = devices[0].comm;
@@ -201,7 +197,6 @@ void InputManager::init()
 				if(!gParser->Open(gStrPort.c_str()))
 				{
 					LOG(LogInfo) << "Unable to open the device on port " << gStrPort;
-					UnloadLibCec(gParser);
 				} else {
 				gParser->SetActiveSource();
 				}
@@ -302,8 +297,10 @@ void InputManager::deinit()
 		mCECInputConfig = NULL;
 	}
 
-	gParser->Close();
-	UnloadLibCec(gParser);
+	if(gParser) {
+		gParser->Close();
+		UnloadLibCec(gParser);
+	}
 
 	SDL_JoystickEventState(SDL_DISABLE);
 	SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
